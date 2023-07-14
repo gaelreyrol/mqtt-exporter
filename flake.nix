@@ -32,28 +32,7 @@
         ];
       };
 
-      packages.default = pkgs.buildGoModule {
-        pname = "mqtt-exporter";
-        version = "dev";
-
-        src = ./.;
-
-        # vendorHash = pkgs.lib.fakeHash;
-        vendorHash = "sha256-SA2sjZfisHLpDm1820GToerHLbE1oQ2obl9pmsiyRqE=";
-
-        ldflags = [
-          "-s"
-          "-w"
-        ];
-
-        meta = with pkgs.lib; {
-          description = "Export MQTT messages to Promotheus";
-          homepage = "https://github.com/gaelreyrol/mqtt-exporter";
-          license = licenses.mit;
-          maintainers = with maintainers; [ gaelreyrol ];
-          mainProgram = "mqtt_exporter";
-        };
-      };
+      packages.default = pkgs.callPackage ./default.nix { };
 
       formatter = treefmtEval.config.build.wrapper;
 
