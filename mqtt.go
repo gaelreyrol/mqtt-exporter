@@ -19,7 +19,7 @@ var connectHandler mqtt.OnConnectHandler = func(client mqtt.Client) {
 }
 
 var connectLostHandler mqtt.ConnectionLostHandler = func(client mqtt.Client, err error) {
-	fmt.Printf("connection lost: %v", err)
+	log.Error().Str("context", "mqtt").Msgf("connection lost: %v", err)
 }
 
 func NewClient(config Config) *mqtt.Client {
@@ -62,12 +62,12 @@ func handleMessage(topic Topic, messageCounter *prometheus.Counter, gauge *prome
 
 	for key, value := range payload {
 		if topic.IsFieldFiltered(key) {
-			log.Info().Str("context", "mqtt").Msgf("skipping field key %s", key)
+			log.Debug().Str("context", "mqtt").Msgf("skipping field key %s", key)
 			continue
 		}
 		floatVal, err := fieldValue(value, key)
 		if err != nil {
-			fmt.Println(err.Error())
+			log.Error().Str("context", "mqtt").Msg(err.Error())
 			continue
 		}
 		gauge.WithLabelValues(key).Set(floatVal)
