@@ -24,5 +24,27 @@
           golangci-lint
         ];
       };
+
+      packages.default = pkgs.buildGoModule {
+        pname = "mqtt-exporter";
+        version = "dev";
+
+        src = ./.;
+
+        vendorHash = "sha256-IGnZdyaq50Ja3LzCzruk19bPUgeN0wuN+tc6jk9Ck5A=";
+
+        ldflags = [
+          "-s"
+          "-w"
+        ];
+
+        meta = with pkgs.lib; {
+          description = "Export MQTT messages to Promotheus";
+          homepage = "https://github.com/gaelreyrol/mqtt-exporter";
+          license = licenses.mit;
+          maintainers = with maintainers; [ gaelreyrol ];
+          mainProgram = "mqtt_exporter";
+        };
+      };
     });
 }
