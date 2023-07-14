@@ -18,10 +18,8 @@ func NewTopicMessagesTotalCounter(topic Topic) prometheus.Counter {
 func NewTopicFieldsGaugeVec(topic Topic) *prometheus.GaugeVec {
 	return prometheus.NewGaugeVec(
 		prometheus.GaugeOpts{
-			Name: "mqtt_topic_field",
-			ConstLabels: prometheus.Labels{
-				"topic": topic.Name,
-			},
+			Name:        "mqtt_topic_field",
+			ConstLabels: getConstLabels(topic),
 		},
 		[]string{"name"},
 	)
