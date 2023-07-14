@@ -1,5 +1,7 @@
 # mqtt-exporter
 
+[![CI](https://github.com/gaelreyrol/mqtt-exporter/actions/workflows/ci.yml/badge.svg)](https://github.com/gaelreyrol/mqtt-exporter/actions/workflows/ci.yml)
+
 Export MQTT messages to Promotheus
 
 > **Warning**

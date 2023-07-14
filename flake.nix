@@ -59,6 +59,8 @@
 
       checks = {
         formatting = treefmtEval.config.build.check self;
+
+        mqtt-exporter = self.packages.${system}.default;
       };
     });
 }
