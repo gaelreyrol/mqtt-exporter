@@ -14,6 +14,14 @@ type App struct {
 	Registry *prometheus.Registry
 	Server   *http.Server
 	Client   *mqtt.Client
+	topics   map[string]chan *map[string]float64
+}
+
+type TopicContext struct {
+	topic    *Topic
+	registry *prometheus.Registry
+	counter  *prometheus.Counter
+	gauge    *prometheus.GaugeVec
 }
 
 func NewApp(configPath string, listenAddress string, metricsPath string) (*App, error) {
@@ -28,6 +36,7 @@ func NewApp(configPath string, listenAddress string, metricsPath string) (*App, 
 	}
 
 	app.Client = NewClient(*app.Config)
+	app.topics = make(map[string]chan *map[string]float64, len(app.Config.Topics))
 
 	http.Handle(metricsPath, promhttp.HandlerFor(
 		app.Registry,
@@ -42,10 +51,15 @@ func NewApp(configPath string, listenAddress string, metricsPath string) (*App, 
 
 func (app *App) Start() error {
 	for _, topic := range app.Config.Topics {
+		app.topics[topic.Name] = make(chan *map[string]float64)
+
 		topicReg := prometheus.NewRegistry()
 		app.Registry.Register(topicReg)
 
-		Subscribe(app, topic, topicReg)
+		go SubscribeTopic(app, &topic)
+
+		context := InitializeTopicContext(topic, topicReg)
+		go ExportTopicMessages(app, context)
 	}
 
 	return app.Server.ListenAndServe()

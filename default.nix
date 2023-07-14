@@ -8,7 +8,6 @@ buildGoModule {
 
   src = ./.;
 
-  # vendorHash = pkgs.lib.fakeHash;
   vendorHash = "sha256-SA2sjZfisHLpDm1820GToerHLbE1oQ2obl9pmsiyRqE=";
 
   ldflags = [
