@@ -84,3 +84,17 @@ The `garage_temperature` field will not be exported to Prometheus.
 > **Warning**
 > Each value's field extracted from the payload must be `float` compatible.
 > Strings or child object path values are not supported.
+
+# Development
+
+## Requirements
+
+- A MQTT broker such as [Mosquitto](https://mosquitto.org/)
+- Go ^1.20
+
+Or install Nix and run `nix develop`.
+
+## ToDo
+
+- [ ] Unit Testing
+- [ ] Real world tests with NixOS test VM

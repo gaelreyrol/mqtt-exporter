@@ -26,6 +26,7 @@
     {
       devShells.default = pkgs.mkShellNoCC {
         packages = with pkgs; [
+          mosquitto
           go
           gotools
           golangci-lint
