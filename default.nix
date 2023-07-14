@@ -17,7 +17,7 @@ buildGoModule {
   ];
 
   meta = with lib; {
-    description = "Export MQTT messages to Promotheus";
+    description = "Export MQTT messages to Prometheus";
     homepage = "https://github.com/gaelreyrol/mqtt-exporter";
     license = licenses.mit;
     maintainers = with maintainers; [ gaelreyrol ];
