@@ -1,3 +1,4 @@
 .direnv
 mqtt_exporter
 result
+config.toml

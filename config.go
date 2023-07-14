@@ -13,9 +13,8 @@ type Config struct {
 }
 
 type Topic struct {
-	Name     string
-	Interval int16
-	Fields   []string
+	Name   string
+	Fields []string
 }
 
 func NewConfig() *Config {
