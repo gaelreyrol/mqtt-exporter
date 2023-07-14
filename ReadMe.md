@@ -5,7 +5,7 @@
 Export MQTT messages to Promotheus
 
 > **Warning**
-> This exporter allows you to simplify your IoT monitoring stack if you don't want to store messages on the long run. While InfluxDB or other timeseries database are well suited for IoT messages, I built this exporter because I don't need them, just a temporary storage (at least a few months). Also Prometheus is a piece of software that is already deployed in my stack along with Grafana, so I wanted to keep it simple and stupid.
+> This exporter allows you to simplify your IoT monitoring stack if you don't want to store messages on the long run. While InfluxDB or other timeseries database are well suited for IoT messages, I built this exporter because I don't need those databases, I just need a temporary storage (at least a few months). Also Prometheus is a piece of software that is already deployed in my stack along with Grafana, so I wanted to keep it simple and stupid.
 
 > **Warning**
 > Only JSON is supported with no level of depth, every  value must be at the root of the JSON object.
