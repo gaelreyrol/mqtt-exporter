@@ -15,11 +15,13 @@ This project is still a work in progress.
 
 # Usage
 
+With Go:
+
 ```bash
 go install github.com/gaelreyrol/mqtt-exporter
 ```
 
-You change:
+You can change the following options from the command line:
 
 - the listening address server with `-listen-addr`, defaults to `:8181`.
 - the telemetry path with `-telemetry-path`, defaults to `/metrics`.
