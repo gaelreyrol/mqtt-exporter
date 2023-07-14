@@ -1,11 +1,12 @@
 package mqttexporter
 
 import (
+	"context"
 	"net/http"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/rs/zerolog/log"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 type App struct {
@@ -15,7 +16,7 @@ type App struct {
 	Client   *mqtt.Client
 }
 
-func NewApp(configPath string, listenAddress string) App {
+func NewApp(configPath string, listenAddress string, metricsPath string) (*App, error) {
 	app := App{
 		Config:   NewConfig(),
 		Registry: prometheus.NewRegistry(),
@@ -23,10 +24,34 @@ func NewApp(configPath string, listenAddress string) App {
 	}
 
 	if err := app.Config.FromFile(configPath); err != nil {
-		log.Fatal().Str("context", "app").Msg(err.Error())
+		return nil, err
 	}
 
 	app.Client = NewClient(*app.Config)
 
-	return app
+	http.Handle(metricsPath, promhttp.HandlerFor(
+		app.Registry,
+		promhttp.HandlerOpts{
+			EnableOpenMetrics: true,
+			Registry:          app.Registry,
+		},
+	))
+
+	return &app, nil
+}
+
+func (app *App) Start() error {
+	for _, topic := range app.Config.Topics {
+		topicReg := prometheus.NewRegistry()
+		app.Registry.Register(topicReg)
+
+		Subscribe(app, topic, topicReg)
+	}
+
+	return app.Server.ListenAndServe()
+}
+
+func (app *App) Shutdown(ctx context.Context) error {
+	(*app.Client).Disconnect(0)
+	return app.Server.Shutdown(ctx)
 }
