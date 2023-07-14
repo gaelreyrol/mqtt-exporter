@@ -1,6 +1,6 @@
 broker = "192.168.1.14:1883"
 
-[topics.lixee-zlinky]
+[[topics]]
 name = "zigbee2mqtt/LiXee ZLinky"
 interval = 60
 fields = [

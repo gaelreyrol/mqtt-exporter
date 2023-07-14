@@ -9,7 +9,7 @@ import (
 
 type Config struct {
 	Broker string
-	Topics map[string]*Topic
+	Topics []Topic
 }
 
 type Topic struct {
@@ -18,8 +18,8 @@ type Topic struct {
 	Fields   []string
 }
 
-func NewConfig() Config {
-	return Config{
+func NewConfig() *Config {
+	return &Config{
 		Broker: ":1883",
 		Topics: nil,
 	}

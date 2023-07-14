@@ -31,7 +31,8 @@
 
         src = ./.;
 
-        vendorHash = "sha256-IGnZdyaq50Ja3LzCzruk19bPUgeN0wuN+tc6jk9Ck5A=";
+        # vendorHash = pkgs.lib.fakeHash;
+        vendorHash = "sha256-SA2sjZfisHLpDm1820GToerHLbE1oQ2obl9pmsiyRqE=";
 
         ldflags = [
           "-s"
