@@ -43,7 +43,7 @@ mqtt_topic_messages_total{topic="zigbee2mqtt/my_thermostat"} 14
 
 The configuration file follows the [TOML](https://toml.io/en/) format.
 
-Here is an configuration example:
+Here is a configuration example:
 
 ```toml
 broker = "localhost:1883"
@@ -58,18 +58,18 @@ fields = [
 
 ## `broker`
 
-The MQTT broker TCP address.
+The MQTT broker TCP address, for example `localhost:1883`.
 
 It does no yet support encryption nor authentication.
 
 ## `topics`
 
-Topics represent each topic messages you want to export to Prometheus.
+Topics represents each topic messages to export to Prometheus.
 
 The `name` field represents the topic name available in your broker.
-The `fields` field represents each key that should be exported to Prometheus from a JSON payload received in the topic.
+The `fields` field represents each key that should be exported to Prometheus from a message received in the topic.
 
-For example if the following JSON payload is received with two fields defined `"outside_temperature", "inside_temperature"`:
+For example if the following payload is received with two fields defined `outside_temperature` and `inside_temperature`:
 
 ```json
 {
@@ -81,6 +81,6 @@ For example if the following JSON payload is received with two fields defined `"
 
 The `garage_temperature` field will not be exported to Prometheus.
 
-Each value's field extracted from the JSON payload must be `float` compatible.
-
-Strings or child object path values are not supported.
+> **Warning**
+> Each value's field extracted from the payload must be `float` compatible.
+> Strings or child object path values are not supported.
