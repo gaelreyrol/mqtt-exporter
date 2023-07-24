@@ -4,11 +4,8 @@
 
 Export MQTT messages to Prometheus
 
-> **Warning**
-> This exporter allows you to simplify your IoT monitoring stack if you don't want to store messages on the long run. While InfluxDB or other timeseries database are well suited for IoT messages, I built this exporter because I don't need those databases, I just need a temporary storage (at least a few months). Also Prometheus is a piece of software that is already deployed in my stack along with Grafana, so I wanted to keep it simple and stupid.
-
-> **Warning**
-> Only JSON is supported with no level of depth, every  value must be at the root of the JSON object.
+> **Info**
+> This exporter allows you to simplify your IoT monitoring stack if you don't want to store messages on the long run. While InfluxDB or other timeseries database are well suited for IoT messages, I built this exporter because I don't need those databases, I just need a temporary storage (at least a few months). Also Prometheus is a piece of software that is already deployed in my stack along with Grafana, so I wanted to keep it simple and stupid. I do not recommend any one to use this project unless your motivations are the same.
 
 
 This project is still a work in progress.
@@ -82,7 +79,10 @@ For example if the following payload is received with two fields defined `outsid
 The `garage_temperature` field will not be exported to Prometheus.
 
 > **Warning**
-> Each value's field extracted from the payload must be `float` compatible.
+> Only **JSON** is supported with **zero level of depth**, every value must be at the root of the JSON object.
+
+> **Warning**
+> Each value's field extracted from the payload must be **`float`** compatible.
 > Strings or child object path values are not supported.
 
 # Development
