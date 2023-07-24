@@ -30,6 +30,7 @@
           go
           gotools
           golangci-lint
+          inetutils
         ];
       };
 

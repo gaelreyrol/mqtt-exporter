@@ -6,7 +6,6 @@ import (
 	"math"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
-	"github.com/prometheus/client_golang/prometheus"
 	"github.com/rs/zerolog/log"
 )
 
@@ -52,14 +51,13 @@ func fieldValue(value interface{}, key string) (float64, error) {
 	}
 }
 
-func handleMessage(topic Topic, messageCounter *prometheus.Counter, gauge *prometheus.GaugeVec, msg *mqtt.Message) {
-	(*messageCounter).Inc()
+func handleMessage(topic *Topic, msg *mqtt.Message) (*map[string]float64, error) {
 	payload := make(map[string]interface{})
 	if err := json.Unmarshal((*msg).Payload(), &payload); err != nil {
-		log.Error().Str("context", "mqtt").Msgf("failed to parse message from topic: %s", topic.Name)
-		return
+		return nil, fmt.Errorf("failed to parse message from topic: %s", topic.Name)
 	}
 
+	values := make(map[string]float64)
 	for key, value := range payload {
 		if topic.IsFieldFiltered(key) {
 			log.Debug().Str("context", "mqtt").Msgf("skipping field key %s", key)
@@ -70,20 +68,21 @@ func handleMessage(topic Topic, messageCounter *prometheus.Counter, gauge *prome
 			log.Error().Str("context", "mqtt").Msg(err.Error())
 			continue
 		}
-		gauge.WithLabelValues(key).Set(floatVal)
+		values[key] = floatVal
 	}
+	return &values, nil
 }
 
-func Subscribe(app *App, topic Topic, registry *prometheus.Registry) {
-	messageCounter := NewTopicMessagesTotalCounter(topic)
-	registry.MustRegister(messageCounter)
-
-	gauge := NewTopicFieldsGaugeVec(topic)
-	app.Registry.MustRegister(gauge)
-
+func SubscribeTopic(app *App, topic *Topic) {
 	token := (*app.Client).Subscribe(topic.Name, 0, func(client mqtt.Client, msg mqtt.Message) {
-		messageCounter.Inc()
-		handleMessage(topic, &messageCounter, gauge, &msg)
+		log.Debug().Str("context", "mqtt").Msgf("handling message received from topic '%s'", topic.Name)
+		payload, err := handleMessage(topic, &msg)
+		if err != nil {
+			log.Error().Str("context", "mqtt").Msg(err.Error())
+			return
+		}
+		log.Debug().Str("context", "mqtt").Msgf("sending message from topic '%s' to topic channels", topic.Name)
+		app.topics[topic.Name] <- payload
 	})
 	token.Wait()
 	log.Info().Str("context", "mqtt").Msgf("subscribed to topic '%s'", topic.Name)
