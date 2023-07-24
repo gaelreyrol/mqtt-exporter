@@ -98,5 +98,5 @@ Or install Nix and run `nix develop`.
 
 - [ ] Unit tests basic features
 - [ ] Real world tests with NixOS test VM
-- [ ] Split listening and exporting via topic channels
+- [x] Split listening and exporting via topic channels
 - [ ] Forget messages between intervals
