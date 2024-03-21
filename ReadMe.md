@@ -1,6 +1,7 @@
 # mqtt-exporter
 
 [![CI](https://github.com/gaelreyrol/mqtt-exporter/actions/workflows/ci.yml/badge.svg)](https://github.com/gaelreyrol/mqtt-exporter/actions/workflows/ci.yml)
+[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
 
 Export MQTT messages to Prometheus
 
